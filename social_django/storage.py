@@ -110,7 +110,7 @@ class DjangoUserMixin(UserMixin):
     def get_users_by_email(cls, email):
         user_model = cls.user_model()
         email_field = getattr(user_model, "EMAIL_FIELD", "email")
-        return user_model._default_manager.filter(**{email_field + "__iexact": email})
+        return user_model._default_manager.filter(**{f"{email_field}__iexact": email})
 
     @classmethod
     def get_social_auth(cls, provider, uid):
@@ -214,8 +214,7 @@ class DjangoPartialMixin(PartialMixin):
 
     @classmethod
     def destroy(cls, token):
-        partial = cls.load(token)
-        if partial:
+        if partial := cls.load(token):
             partial.delete()
 
 

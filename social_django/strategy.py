@@ -123,10 +123,7 @@ class DjangoStrategy(BaseStrategy):
         return self.session.setdefault(name, value)
 
     def build_absolute_uri(self, path=None):
-        if self.request:
-            return self.request.build_absolute_uri(path)
-        else:
-            return path
+        return self.request.build_absolute_uri(path) if self.request else path
 
     def random_string(self, length=12, chars=BaseStrategy.ALLOWED_CHARS):
         return get_random_string(length, chars)

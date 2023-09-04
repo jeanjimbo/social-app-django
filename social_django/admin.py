@@ -31,7 +31,7 @@ class UserSocialAuthOption(admin.ModelAdmin):
             fieldnames = ("first_name", "last_name", "email", username)
             all_names = self._get_all_field_names(_User._meta)
             search_fields = [name for name in fieldnames if name and name in all_names]
-        return ["user__" + name for name in search_fields] + getattr(
+        return [f"user__{name}" for name in search_fields] + getattr(
             settings, setting_name("ADMIN_SEARCH_FIELDS"), []
         )
 
