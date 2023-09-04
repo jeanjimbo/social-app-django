@@ -52,7 +52,7 @@ def login_redirect(request):
     )
     if value:
         value = quote(value)
-        querystring = REDIRECT_FIELD_NAME + "=" + value
+        querystring = f"{REDIRECT_FIELD_NAME}={value}"
     else:
         querystring = ""
 

@@ -7,9 +7,9 @@ from django.db import models
 from django.utils.encoding import force_str
 from social_core.utils import setting_name
 
-POSTGRES_JSONFIELD = getattr(settings, setting_name("POSTGRES_JSONFIELD"), False)
-
-if POSTGRES_JSONFIELD:
+if POSTGRES_JSONFIELD := getattr(
+    settings, setting_name("POSTGRES_JSONFIELD"), False
+):
     warnings.warn(
         "SOCIAL_AUTH_POSTGRES_JSONFIELD has been renamed to "
         "SOCIAL_AUTH_JSONFIELD_ENABLED and will be removed in the next release."
@@ -58,13 +58,12 @@ class JSONField(JSONFieldBase):
         value = value or "{}"
         if isinstance(value, bytes):
             value = str(value, "utf-8")
-        if isinstance(value, str):
-            try:
-                return json.loads(value)
-            except Exception as err:
-                raise ValidationError(str(err))
-        else:
+        if not isinstance(value, str):
             return value
+        try:
+            return json.loads(value)
+        except Exception as err:
+            raise ValidationError(str(err))
 
     def validate(self, value, model_instance):
         """Check value is a valid JSON string, raise ValidationError on
